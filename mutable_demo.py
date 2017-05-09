@@ -11,6 +11,7 @@ from uuid import uuid4
 
 class MutableEngine(MutableBase):
     def __init__(self, serial_number: str, configuration: str):
+        super().__init__()
         self._serial_number = serial_number
         self._configuration = configuration
 
@@ -49,15 +50,15 @@ class Car(Base):
     __tablename__ = 'car'
     id = Column(UUID(as_uuid=True), primary_key=True, nullable=False)
     name = Column(String)
-    engine = Column(Mutable.as_mutable(MarshmallowJSON(EngineSchema)))
+    engine = Column(MutableEngine.as_mutable(MarshmallowJSON(EngineSchema)))
 
 
 def main():
-    engine = create_engine('postgresql://postgres:postgres@localhost:5432/pycon_marshmallow', echo=False)
+    engine = create_engine('postgresql://postgres:postgres@localhost:5432/pycon_marshmallow', echo=True)  # Turn on echo to follow sqlalchemy session
     session_maker = sessionmaker(bind=engine)
     session: Session = session_maker()
 
-    car = Car('Ferrari')
+    car = Car(name='Ferrari')
     car.id = uuid4()
     car_id = car.id
     car.engine = MutableEngine('ENG1234', 'V12')
