@@ -4,7 +4,6 @@ from sqlalchemy import Column, String, create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from marshmallow import Schema, fields, post_load
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.ext.mutable import Mutable
 from sqlalchemy.dialects.postgresql import UUID
 from uuid import uuid4
 
@@ -68,10 +67,13 @@ def main():
     # expunge to prove query works
     session.expunge_all()
     car_copy = session.query(Car).get(car_id)
+    # prints Car Ferrari has a V12 with serial number ENG1234
     print(f'Car {car_copy.name} has a {car_copy.engine.configuration} with serial number {car_copy.engine.serial_number}')
     car_copy.engine.configuration = 'V10'
     session.commit()
+    session.expunge_all()
     car_copy2 = session.query(Car).get(car_id)
+    # prints Car Ferrari has a V10 with serial number ENG1234 - the configuration mutation was correctly tracked
     print(f'Car {car_copy.name} has a {car_copy.engine.configuration} with serial number {car_copy.engine.serial_number}')
 
 
