@@ -17,7 +17,7 @@ There are 3 scripts in increasing order of complexity:
 3. graph_demo brings everything together while also demonstrating nested mutation tracking
 
 
-#Credits
+# Credits
 
 SQLAlchemy was developed by Mike Bayer and other contributors. Licensed under the MIT license - http://www.sqlalchemy.org for more information
 Marshmallow was developed by Steven Loria and other contributors. http://marshmallow.readthedocs.io/ for more information
